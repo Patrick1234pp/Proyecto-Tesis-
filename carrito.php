@@ -33,32 +33,68 @@ if(isset($_POST['btnAccion'])) {
                 $mensaje.="Ok precio".$PRECIO."<br/>";
             }else{  $mensaje.="Upps... algo pasa con el precio"."<br/>"; break; 
 
-            }
+        }
+        if(is_numeric(openssl_decrypt($_POST['porcion'],COD,KEY))) {
+            $PORCION=openssl_decrypt($_POST['porcion'],COD,KEY);
+            $mensaje.="Ok porcion".$PORCION."<br/>";
+        }else{  $mensaje.="Upps... algo pasa con la porcion"."<br/>"; break; 
 
+        }
+            
             if(!isset($_SESSION['CARRITO'])) {
                 $producto=array(
                     'ID'=>$ID,
                     'NOMBRE'=>$NOMBRE,
                     'CANTIDAD'=>$CANTIDAD,
-                    'PRECIO'=>$PRECIO
+                    'PRECIO'=>$PRECIO,
+                    'PORCION'=>$PORCION
                 );
                 $_SESSION['CARRITO'][0]=$producto;
+                $mensaje= "Producto Agregado al carrito";
 
             }else{
+
+                $idProductos=array_column($_SESSION['CARRITO'],"ID");
+
+                if(in_array($ID,$idProductos)) {
+                    echo "<script>alert('El Producto ya ha sido seleccionado...');</script>";
+                    $mensaje="";
+                }else{
+
                 $NumeroProductos=count($_SESSION['CARRITO']);
                 $producto=array(
                     'ID'=>$ID,
                     'NOMBRE'=>$NOMBRE,
                     'CANTIDAD'=>$CANTIDAD,
-                    'PRECIO'=>$PRECIO
+                    'PRECIO'=>$PRECIO,
+                    'PORCION'=>$PORCION
                 );
                 $_SESSION['CARRITO'][$NumeroProductos]=$producto;
-
+                $mensaje= "Producto Agregado al carrito";
             }
-            $mensaje= print_r( $_SESSION,true);
-        break;  
+        }
+            //$mensaje= print_r( $_SESSION,true);
 
+
+        break;
+        case "Eliminar":
+            if(is_numeric(openssl_decrypt($_POST['id'],COD,KEY ))){
+                $ID=openssl_decrypt($_POST['id'],COD,KEY );
+
+                foreach($_SESSION['CARRITO'] as $indice=>$producto) {
+                    if($producto['ID']==$ID) {
+                        unset($_SESSION['CARRITO'][$indice]);
+                        echo "<script>alert('Producto Eliminado...');</script>";
+                    }
+                }
+            }else {
+                $mensaje.="Upss... Id Incorrecto".$ID."<br/>";
+            }
+
+        break;
     }
+
 }
+
 
 ?>
