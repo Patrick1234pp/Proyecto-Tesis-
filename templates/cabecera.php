@@ -42,6 +42,7 @@
                 <a class="nav-link" href="mostrarCarrito.php">Carrito (<?php echo (empty($_SESSION['CARRITO']))?0:count($_SESSION['CARRITO']);
                 ?>)</a>
             </li>
+            <div> <a href="acceder.php" class="btn btn-danger">Acceder</a></div>
         </ul>
     </div>
 
