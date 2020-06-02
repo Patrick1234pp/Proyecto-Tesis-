@@ -4,6 +4,7 @@ include 'global/conexion.php';
 include 'carrito.php';
 include 'templates/cabecera.php';
 ?>
+
 <br>
 </br>
 </br>
